@@ -1,0 +1,21 @@
+Card Functions:
+    Connor:
+        a.	Card()
+        b.	Card (…)
+        c.	get_rank()
+        d.	get_suit()
+        e.	get_suit(…)
+        f.	is_face()
+        g.	is_right_bower()
+        h.	is_left_bower()
+        i.	is_trump()
+    Matt:
+        j.	operator<()
+        k.	operator==()
+        l.	operator!=()
+        m.	suit_next()
+        n.	operator<<
+        o.	Card_less()
+        p.	Card_less(…)
+
+
