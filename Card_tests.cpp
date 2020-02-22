@@ -21,7 +21,7 @@ TEST(get_suit_2) {
     ASSERT_EQUAL(d.get_suit(Card::SUIT_HEARTS), Card::SUIT_HEARTS);
     
     Card e(Card::RANK_TEN, Card::SUIT_SPADES);
-    ASSERT_EQUAL(d.get_suit(Card::SUIT_DIAMONDS), Card::SUIT_SPADES);
+    ASSERT_EQUAL(e.get_suit(Card::SUIT_DIAMONDS), Card::SUIT_SPADES);
 }
 TEST(is_face) {
     Card c(Card::RANK_JACK, Card::SUIT_HEARTS);
@@ -85,28 +85,148 @@ TEST(output_overload) {
     
     ASSERT_EQUAL(test.str(), correct.str());
 }
-TEST(remaining_operators) {
+
+TEST(less_than){
     Card jack(Card::RANK_JACK, Card::SUIT_HEARTS);
     Card jack2(Card::RANK_JACK, Card::SUIT_CLUBS);
     Card queen(Card::RANK_QUEEN, Card::SUIT_HEARTS);
-    
+    Card ten1(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ten2(Card::RANK_TEN, Card::SUIT_HEARTS);
     Card ace(Card::RANK_ACE, Card::SUIT_SPADES);
     Card two(Card::RANK_TWO, Card::SUIT_CLUBS);
-    
-    ASSERT_EQUAL(jack < queen, true);
-    ASSERT_EQUAL(jack > queen, false);
-    
-    ASSERT_EQUAL(ace < two, false);
-    ASSERT_EQUAL(ace > two, true);
-    
-    ASSERT_EQUAL(jack == jack2, true);
-    ASSERT_EQUAL(jack != jack2, false);
-    
-    ASSERT_EQUAL(ace == two, false);
-    ASSERT_EQUAL(ace != two, true);
-    
+   
+   //Same suit
+   ASSERT_EQUAL( jack < queen, true);
+   ASSERT_EQUAL( queen < jack, false);
+   //Same rank different suit
+   ASSERT_EQUAL(jack2 < jack, false);
+   ASSERT_EQUAL(jack < jack2, true);
+   //Same Rank same suit
+   ASSERT_EQUAL(ten1 < ten2, false); 
+   //Different suit
+   ASSERT_EQUAL(jack2 < ace, true);
+   ASSERT_EQUAL(ace < jack2, false);
+   //Face card non face card same suit
+   ASSERT_EQUAL(jack < ten2, false);
+   ASSERT_EQUAL(ten2 < jack, true);
+   //Face card non face card different suit
+   ASSERT_EQUAL(two < jack, true);
+   ASSERT_EQUAL(jack < two, false);
+   //Two non face cards
+   ASSERT_EQUAL(two < ten1, true);
+   ASSERT_EQUAL(ten1 < two, false);
+   //Two face cards
+   ASSERT_EQUAL(jack < queen, true);
+   ASSERT_EQUAL(queen < ace, true);
+   ASSERT_EQUAL(ace < jack, false);
 }
-TEST(card_less) {
+
+TEST(greater_than){
+    Card jack(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card jack2(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card queen(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card ten1(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ten2(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ace(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card two(Card::RANK_TWO, Card::SUIT_CLUBS);
+   
+   //Same suit
+   ASSERT_EQUAL( jack > queen, false);
+   ASSERT_EQUAL( queen > jack, true);
+   //Same rank different suit
+   ASSERT_EQUAL(jack2 > jack, true);
+   ASSERT_EQUAL(jack > jack2, false);
+   //Same Rank same suit
+   ASSERT_EQUAL(ten1 > ten2, false); 
+   //Different suit
+   ASSERT_EQUAL(jack2 > ace, false);
+   ASSERT_EQUAL(ace > jack2, true);
+   //Face card non face card same suit
+   ASSERT_EQUAL(jack > ten2, true);
+   ASSERT_EQUAL(ten2 > jack, false);
+   //Face card non face card different suit
+   ASSERT_EQUAL(two > jack, false);
+   ASSERT_EQUAL(jack > two, true);
+   //Two non face cards
+   ASSERT_EQUAL(two > ten1, false);
+   ASSERT_EQUAL(ten1 > two, true);
+   //Two face cards
+   ASSERT_EQUAL(jack > queen, false);
+   ASSERT_EQUAL(queen > ace, false);
+   ASSERT_EQUAL(ace > jack, true);
+}
+
+TEST(not_equal){
+    Card jack(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card jack2(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card queen(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card ten1(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ten2(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ace(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card two(Card::RANK_TWO, Card::SUIT_CLUBS);
+   
+   //Same suit
+   ASSERT_EQUAL( jack != queen, true);
+   ASSERT_EQUAL( queen != jack, true);
+   //Same rank different suit
+   ASSERT_EQUAL(jack2 != jack, true);
+   ASSERT_EQUAL(jack != jack2, true);
+   //Same Rank same suit
+   ASSERT_EQUAL(ten1 != ten2, false); 
+   //Different suit
+   ASSERT_EQUAL(jack2 != ace, true);
+   ASSERT_EQUAL(ace != jack2, true);
+   //Face card non face card same suit
+   ASSERT_EQUAL(jack != ten2, true);
+   ASSERT_EQUAL(ten2 != jack, true);
+   //Face card non face card different suit
+   ASSERT_EQUAL(two != jack, true);
+   ASSERT_EQUAL(jack != two, true);
+   //Two non face cards
+   ASSERT_EQUAL(two != ten1, true);
+   ASSERT_EQUAL(ten1 != two, true);
+   //Two face cards
+   ASSERT_EQUAL(jack != queen, true);
+   ASSERT_EQUAL(queen != ace, true);
+   ASSERT_EQUAL(ace != jack, true);
+}
+
+TEST(equality){
+    Card jack(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card jack2(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card queen(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card ten1(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ten2(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ace(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card two(Card::RANK_TWO, Card::SUIT_CLUBS);
+   
+   //Same suit
+   ASSERT_EQUAL( jack == queen, false);
+   ASSERT_EQUAL( queen == jack, false);
+   //Same rank different suit
+   ASSERT_EQUAL(jack2 == jack, false);
+   ASSERT_EQUAL(jack == jack2, false);
+   //Same Rank same suit
+   ASSERT_EQUAL(ten1 == ten2, true); 
+   //Different suit
+   ASSERT_EQUAL(jack2 == ace, false);
+   ASSERT_EQUAL(ace == jack2, false);
+   //Face card non face card same suit
+   ASSERT_EQUAL(jack == ten2, false);
+   ASSERT_EQUAL(ten2 == jack, false);
+   //Face card non face card different suit
+   ASSERT_EQUAL(two == jack, false);
+   ASSERT_EQUAL(jack == two, false);
+   //Two non face cards
+   ASSERT_EQUAL(two == ten1, false);
+   ASSERT_EQUAL(ten1 == two, false);
+   //Two face cards
+   ASSERT_EQUAL(jack == queen, false);
+   ASSERT_EQUAL(queen == ace, false);
+   ASSERT_EQUAL(ace == jack, false);
+}
+
+TEST(card_less_1) {
     Card jackhearts(Card::RANK_JACK, Card::SUIT_HEARTS);
     Card jackdiamonds(Card::RANK_JACK, Card::SUIT_DIAMONDS);
     Card tenspades(Card::RANK_TEN, Card::SUIT_SPADES);
@@ -119,19 +239,90 @@ TEST(card_less) {
     ASSERT_EQUAL(Card_less(jackhearts, tenspades, Card::SUIT_HEARTS), false);
     ASSERT_EQUAL(Card_less(tenspades, jackhearts, Card::SUIT_HEARTS), true);
     
-    ASSERT_EQUAL(Card_less(tenspades, jackhearts, Card::SUIT_SPADES), true);
-    
-    ASSERT_EQUAL(Card_less(tenspades, jackhearts, Card::SUIT_SPADES), true);
-    
+    ASSERT_EQUAL(Card_less(tenspades, jackhearts, Card::SUIT_SPADES), false);
+    ASSERT_EQUAL(Card_less(tenspades, jackhearts, Card::SUIT_SPADES), false);
+
+    Card jack(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card jack2(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card queen(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card ten1(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ten2(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ace(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card two(Card::RANK_TWO, Card::SUIT_CLUBS);
+   
+   //Same suit
+   ASSERT_EQUAL( Card_less(jack, queen, Card::SUIT_HEARTS), false);
+   ASSERT_EQUAL( Card_less(queen, jack, Card::SUIT_DIAMONDS), true);
+   //Same rank different suit
+   ASSERT_EQUAL(Card_less(jack2, jack, Card::SUIT_DIAMONDS), true);
+   ASSERT_EQUAL(Card_less(jack, jack2, Card::SUIT_CLUBS), true);
+   //Same Rank same suit
+   ASSERT_EQUAL(Card_less(ten1, ten2, Card::SUIT_HEARTS), false); 
+   //Different suit
+   ASSERT_EQUAL(Card_less(jack2, ace, Card::SUIT_SPADES), false);
+   ASSERT_EQUAL(Card_less(ace, jack2, Card::SUIT_SPADES), true);
+   //Face card non face card same suit
+   ASSERT_EQUAL(Card_less(jack2, ace, Card::SUIT_SPADES), false);
+   ASSERT_EQUAL(Card_less(ten2, jack2, Card::SUIT_SPADES), true);
+   //Face card non face card different suit
+   ASSERT_EQUAL(Card_less(two, jack, Card::SUIT_CLUBS), false);
+   ASSERT_EQUAL(Card_less(jack, two, Card::SUIT_CLUBS), true);
+   //Two non face cards
+   ASSERT_EQUAL(Card_less(two, ten1, Card::SUIT_SPADES), true);
+   ASSERT_EQUAL(Card_less(ten1, two, Card::SUIT_CLUBS), true);
+   //Two face cards
+   ASSERT_EQUAL(Card_less(jack, queen, Card::SUIT_HEARTS), false);
+   ASSERT_EQUAL(Card_less(queen, ace, Card::SUIT_HEARTS), false);
+   ASSERT_EQUAL(Card_less(ace, jack, Card::SUIT_DIAMONDS), true);
+}
+
+TEST(card_less_2)
+{
+    Card jackhearts(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card jackdiamonds(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card tenspades(Card::RANK_TEN, Card::SUIT_SPADES);
+    Card nineclubs(Card::RANK_NINE, Card::SUIT_CLUBS);
+    Card eightclubs(Card::RANK_EIGHT, Card::RANK_EIGHT);
+
     //tests that led card affects algorithm
-    ASSERT_EQUAL(Card_less(nineclubs, tenspades, eightclubs, Card::SUIT_DIAMONDS), false);
-    ASSERT_EQUAL(Card_less(tenspades, nineclubs, eightclubs, Card::SUIT_DIAMONDS), true);
+    ASSERT_EQUAL(Card_less(nineclubs, tenspades, eightclubs, Card::SUIT_DIAMONDS), true);
+    ASSERT_EQUAL(Card_less(tenspades, nineclubs, eightclubs, Card::SUIT_DIAMONDS), false);
     
     ASSERT_EQUAL(Card_less(nineclubs, jackdiamonds, eightclubs, Card::SUIT_DIAMONDS), true);
     ASSERT_EQUAL(Card_less(jackdiamonds, nineclubs, eightclubs, Card::SUIT_DIAMONDS), false);
-    
-}
 
-// Add more test cases here
+    Card jack(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card jack2(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card queen(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card ten1(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ten2(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card ace(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card two(Card::RANK_TWO, Card::SUIT_CLUBS);
+   
+   //Same suit
+   ASSERT_EQUAL( Card_less(jack, queen, ten1, Card::SUIT_HEARTS), false);
+   ASSERT_EQUAL( Card_less(queen, jack, ten1, Card::SUIT_DIAMONDS), true);
+   //Same rank different suit
+   ASSERT_EQUAL(Card_less(jack2, jack, ten2, Card::SUIT_DIAMONDS), true);
+   ASSERT_EQUAL(Card_less(jack, jack2, ten2, Card::SUIT_CLUBS), true);
+   //Same Rank same suit
+   ASSERT_EQUAL(Card_less(ten1, ten2, ten1, Card::SUIT_HEARTS), false); 
+   //Different suit
+   ASSERT_EQUAL(Card_less(jack2, ace, ten1, Card::SUIT_SPADES), false);
+   ASSERT_EQUAL(Card_less(ace, jack2, ace, Card::SUIT_DIAMONDS), false);
+   //Face card non face card same suit
+   ASSERT_EQUAL(Card_less(jack2, ace, ace, Card::SUIT_SPADES), false);
+   ASSERT_EQUAL(Card_less(ten2, jack2, ten2, Card::SUIT_SPADES), true);
+   //Face card non face card different suit
+   ASSERT_EQUAL(Card_less(two, jack, jack, Card::SUIT_CLUBS), false);
+   ASSERT_EQUAL(Card_less(jack, two, two, Card::SUIT_SPADES), true);
+   //Two non face cards
+   ASSERT_EQUAL(Card_less(two, ten1, two, Card::SUIT_SPADES), false);
+   ASSERT_EQUAL(Card_less(ten1, two, ten1, Card::SUIT_SPADES), false);
+   //Two face cards
+   ASSERT_EQUAL(Card_less(jack, two, two, Card::SUIT_CLUBS), true);
+   ASSERT_EQUAL(Card_less(queen, ace, jack2, Card::SUIT_CLUBS), true);
+   ASSERT_EQUAL(Card_less(ace, jack, ace, Card::SUIT_DIAMONDS), true);
+}
 
 TEST_MAIN()
