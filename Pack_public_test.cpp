@@ -38,11 +38,13 @@ TEST(test_pack_reset) {
 
 TEST(test_pack_empty) {
   Pack pack;
+  pack.shuffle();
   for (int i = 0; i < PACK_SIZE - 1; ++i) {
     Card temp = pack.deal_one();
+    cerr<<temp<<endl;
     ASSERT_FALSE(pack.empty());
   }
-  pack.deal_one();
+  cerr<<pack.deal_one();
   ASSERT_TRUE(pack.empty());
 }
 
