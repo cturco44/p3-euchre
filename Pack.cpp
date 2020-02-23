@@ -47,6 +47,25 @@ Pack::Pack() {
     next = 0;
 }
 
+static void in_shuffle(Card* const ptr, int packSize)
+{
+    Card top[packSize/2];
+    Card bottom[packSize/2];
+    for(int i = 0; i < packSize/2; ++i)
+    {
+        top[i] = *(ptr+i);
+    }
+    for(int i = 0; i < packSize/2; ++i)
+    {
+        bottom[i] = *(ptr+(packSize/2)+i);
+    }
+    for(int i = 0; i < packSize/2; ++i)
+    {
+        *(ptr+2*i) = bottom[i];
+        *(ptr+2*i+1) = top[i];
+    }
+
+}
 // REQUIRES: pack_input contains a representation of a Pack in the
 //           format required by the project specification
 // MODIFIES: pack_input
@@ -77,7 +96,12 @@ void Pack::reset(){
 //          performs an in shuffle seven times. See
 //          https://en.wikipedia.org/wiki/In_shuffle.
 void Pack::shuffle() {
-
+    reset();
+    for(int i = 0; i < 7; ++i)
+    {
+        Card* const ptr = &cards.at(0);
+        in_shuffle(ptr, PACK_SIZE);
+    }
 }
 
 // EFFECTS: returns true if there are no more cards left in the pack
