@@ -15,30 +15,30 @@ using namespace std;
 // NOTE: The standard order is the same as that in pack.in.
 // NOTE: Do NOT use pack.in in your implementation of this function
 Pack::Pack() {
-    Card NineSPADES(Card::SUIT_SPADES,Card::RANK_NINE);
-    Card TenSPADES(Card::SUIT_SPADES,Card::RANK_TEN);
-    Card JackSPADES(Card::SUIT_SPADES,Card::RANK_JACK);
-    Card QueenSPADES(Card::SUIT_SPADES,Card::RANK_QUEEN);
-    Card KingSPADES(Card::SUIT_SPADES,Card::RANK_KING);
-    Card AceSPADES(Card::SUIT_SPADES,Card::RANK_ACE);
-    Card NineHEARTS(Card::SUIT_HEARTS,Card::RANK_NINE);
-    Card TenHEARTS(Card::SUIT_HEARTS,Card::RANK_TEN);
-    Card JackHEARTS(Card::SUIT_HEARTS,Card::RANK_JACK);
-    Card QueenHEARTS(Card::SUIT_HEARTS,Card::RANK_QUEEN);
-    Card KingHEARTS(Card::SUIT_HEARTS,Card::RANK_KING);
-    Card AceHEARTS(Card::SUIT_HEARTS,Card::RANK_ACE);
-    Card NineCLUBS(Card::SUIT_CLUBS,Card::RANK_NINE);
-    Card TenCLUBS(Card::SUIT_CLUBS,Card::RANK_TEN);
-    Card JackCLUBS(Card::SUIT_CLUBS,Card::RANK_JACK);
-    Card QueenCLUBS(Card::SUIT_CLUBS,Card::RANK_QUEEN);
-    Card KingCLUBS(Card::SUIT_CLUBS,Card::RANK_KING);
-    Card AceCLUBS(Card::SUIT_CLUBS,Card::RANK_ACE);
-    Card NineDIAMONDS(Card::SUIT_DIAMONDS,Card::RANK_NINE);
-    Card TenDIAMONDS(Card::SUIT_DIAMONDS,Card::RANK_TEN);
-    Card JackDIAMONDS(Card::SUIT_DIAMONDS,Card::RANK_JACK);
-    Card QueenDIAMONDS(Card::SUIT_DIAMONDS,Card::RANK_QUEEN);
-    Card KingDIAMONDS(Card::SUIT_DIAMONDS,Card::RANK_KING);
-    Card AceDIAMONDS(Card::SUIT_DIAMONDS,Card::RANK_ACE);
+    Card NineSPADES(Card::RANK_NINE, Card::SUIT_SPADES);
+    Card TenSPADES(Card::RANK_TEN, Card::SUIT_SPADES);
+    Card JackSPADES(Card::RANK_JACK, Card::SUIT_SPADES);
+    Card QueenSPADES(Card::RANK_QUEEN, Card::SUIT_SPADES);
+    Card KingSPADES(Card::RANK_KING, Card::SUIT_SPADES);
+    Card AceSPADES(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card NineHEARTS(Card::RANK_NINE, Card::SUIT_HEARTS);
+    Card TenHEARTS(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card JackHEARTS(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card QueenHEARTS(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card KingHEARTS(Card::RANK_KING, Card::SUIT_HEARTS);
+    Card AceHEARTS(Card::RANK_ACE, Card::SUIT_HEARTS);
+    Card NineCLUBS(Card::RANK_NINE, Card::SUIT_CLUBS);
+    Card TenCLUBS(Card::RANK_TEN, Card::SUIT_CLUBS);
+    Card JackCLUBS(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card QueenCLUBS(Card::RANK_QUEEN, Card::SUIT_CLUBS);
+    Card KingCLUBS(Card::RANK_KING, Card::SUIT_CLUBS);
+    Card AceCLUBS(Card::RANK_ACE, Card::SUIT_CLUBS);
+    Card NineDIAMONDS(Card::RANK_NINE, Card::SUIT_DIAMONDS);
+    Card TenDIAMONDS(Card::RANK_TEN, Card::SUIT_DIAMONDS);
+    Card JackDIAMONDS(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card QueenDIAMONDS(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card KingDIAMONDS(Card::RANK_KING, Card::SUIT_DIAMONDS);
+    Card AceDIAMONDS(Card::RANK_ACE, Card::SUIT_DIAMONDS);
     
     cards = {NineSPADES,TenSPADES,JackSPADES,QueenSPADES,KingSPADES,AceSPADES,
              NineHEARTS,TenHEARTS,JackHEARTS,QueenHEARTS,KingHEARTS,AceHEARTS,
@@ -49,8 +49,9 @@ Pack::Pack() {
 
 static void in_shuffle(Card* const ptr, int packSize)
 {
-    Card top[packSize/2];
-    Card bottom[packSize/2];
+    const int half = packSize/2;
+    vector<Card> top(half);
+    vector<Card> bottom(half);
     for(int i = 0; i < packSize/2; ++i)
     {
         top[i] = *(ptr+i);
@@ -71,6 +72,7 @@ static void in_shuffle(Card* const ptr, int packSize)
 // MODIFIES: pack_input
 // EFFECTS: Initializes Pack by reading from pack_input.
 Pack::Pack(std::istream& pack_input) {
+    next = 0;
     for(int i=0; i<24; ++i)
     {
         string rank;
@@ -106,7 +108,7 @@ void Pack::shuffle() {
 
 // EFFECTS: returns true if there are no more cards left in the pack
 bool Pack::empty() const {
-    if(next==32)
+    if(next==24)
         return true;
     else 
         return false;

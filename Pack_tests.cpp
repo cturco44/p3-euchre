@@ -14,6 +14,12 @@ TEST(test_pack_default_ctor) {
     ASSERT_EQUAL(Card::SUIT_SPADES, first.get_suit());
 }
 
-// Add more tests here
+TEST(basic_shuffle){
+    Pack pack;
+    pack.shuffle();
+    Card first = pack.deal_one();
+    ASSERT_EQUAL(Card::RANK_KING, first.get_rank());
+    ASSERT_EQUAL(Card::SUIT_CLUBS, first.get_suit());
+}
 
 TEST_MAIN()

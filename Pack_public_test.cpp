@@ -39,7 +39,7 @@ TEST(test_pack_reset) {
 TEST(test_pack_empty) {
   Pack pack;
   for (int i = 0; i < PACK_SIZE - 1; ++i) {
-    pack.deal_one();
+    Card temp = pack.deal_one();
     ASSERT_FALSE(pack.empty());
   }
   pack.deal_one();
