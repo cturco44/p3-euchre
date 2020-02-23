@@ -12,6 +12,11 @@ TEST(test_player_get_name) {
     ASSERT_EQUAL("Alice", alice->get_name());
 
     delete alice;
+    
+    Player * bob = Player_factory("Bob", "Human");
+    ASSERT_EQUAL("Bob", bob->get_name());
+
+    delete bob;
 }
 
 // Add more tests here

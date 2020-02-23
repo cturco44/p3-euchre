@@ -18,4 +18,13 @@ Card Functions:
         o.	Card_less()
         p.	Card_less(…)
 
+Player:
 
+So far, I've created two instances of player, Human and Simple. I added the
+private variable name and a constructor for both of them. I also completed
+the << overload and the Player_factory function. All we need to do is finish
+coding the derived classes HumanPlayer and SimplePlayer as well as write test
+cases.
+
+I figured a simple way to divide this up would be to I code simple and you do
+human, but if you want to do it another way I'm cool with that to.
