@@ -18,6 +18,22 @@ TEST(test_player_get_name) {
 
     delete bob;
 }
+TEST(simple_lead_card) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    Card tenofhearts(Card::RANK_TEN, Card::SUIT_HEARTS);
+    Card nineofdiamonds(Card::RANK_NINE, Card:: SUIT_DIAMONDS);
+    Card queenofspades(Card::RANK_QUEEN, Card::SUIT_SPADES);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(aceofspades);
+    billie->add_card(jackofclubs);
+    billie->add_card(tenofhearts);
+    billie->add_card(nineofdiamonds);
+    billie->add_card(queenofspades);
+    
+    billie->lead_card(Card::SUIT_SPADES);
+}
 
 // Add more tests here
 

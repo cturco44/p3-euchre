@@ -12,6 +12,16 @@ class SimplePlayer : public Player {
 private:
     std::string name;
     std::vector<Card> hand;
+    static Card highest_of_suit(const std::string &suit, const std::vector<Card> &hand) {
+        std::vector<Card> of_suit;
+        for (int i = 0; i < hand.size(); ++i) {
+            if(hand[i].get_suit() == suit) {
+                of_suit.push_back(hand[i]);
+            }
+        }
+        sort(of_suit.begin(), of_suit.end());
+        return of_suit[of_suit.size() - 1];
+    }
 public:
     SimplePlayer(std::string name_in)
       : name(name_in) {}
@@ -93,27 +103,41 @@ public:
         sort(hand.begin(), hand.end());
     
         if (hand[0].is_trump(trump)) {
+            Card holder = hand[hand.size() - 1];
+            hand.erase(hand.begin() + hand.size() - 1);
             
-            return hand[hand.size() - 1];
+            return holder;
         }
-        return hand[0];
+        int highest_nontrump = 0;
+        for (int i = 0; i < hand.size(); ++i) {
+            if(hand[i].get_suit() != trump) {
+                ++highest_nontrump;
+            }
+            else {
+                break;
+            }
+        }
+        Card holder = hand[highest_nontrump];
+        hand.erase(hand.begin() + highest_nontrump);
+        return holder;
     }
     //REQUIRES Player has at least one card, trump is a valid suit
     //EFFECTS  Plays one Card from Player's hand according to their strategy.
     //  The card is removed from the player's hand.
     virtual Card play_card(const Card &led_card, const std::string &trump) {
         assert(hand.size() >= 1);
+        sort(hand.begin(), hand.end());
         std::string led_suit = led_card.get_suit();
-        std::vector<Card> of_led_suit;
+        Card holder;
         
+        holder = highest_of_suit(led_suit, hand);
         for (int i = 0; i < hand.size(); ++i) {
-            if(hand[i].get_suit() == led_suit) {
-                of_led_suit.push_back(hand[i]);
+            if(hand[i] == holder) {
+                hand.erase(hand.begin() + i);
+                break;
             }
         }
-        std::sort(of_led_suit.begin(), of_led_suit.end());
-        of_led_suit[of_led_suit.size() - 1];
-        assert(false);
+        return holder;
     }
     
 };
