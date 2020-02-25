@@ -17,7 +17,7 @@ private:
     std::vector<Card> hand;
     static Card highest_of_suit(const std::string &suit, const std::vector<Card> &hand) {
         std::vector<Card> of_suit;
-        for (int i = 0; i < hand.size(); ++i) {
+        for (int i = 0; i < int(hand.size()); ++i) {
             if(hand[i].get_suit() == suit) {
                 of_suit.push_back(hand[i]);
             }
@@ -48,7 +48,7 @@ public:
         assert(round == 1 || round == 2);
         if(round == 1) {
             int num_good_trump = 0;
-            for(int i = 0; i < hand.size(); ++i) {
+            for(int i = 0; i < int(hand.size()); ++i) {
                 if(hand[i].is_face() && hand[i].is_trump(upcard.get_suit())) {
                     ++num_good_trump;
                 }
@@ -63,7 +63,7 @@ public:
         }
         if(round == 2) {
             int num_good_trump = 0;
-            for(int i = 0; i < hand.size(); ++i) {
+            for(int i = 0; i < int(hand.size()); ++i) {
                 if(hand[i].get_suit() == Suit_next(upcard.get_suit())
                    && hand[i].is_face()) {
                     ++num_good_trump;
@@ -87,7 +87,7 @@ public:
         assert(hand.size() >= 1);
         Card smallest = upcard;
         int smallest_index = 6;
-        for (int i = 0; i < hand.size(); ++i) {
+        for (int i = 0; i < int(hand.size()); ++i) {
             if (hand[i] < smallest) {
                 smallest = hand[i];
                 smallest_index = i;
@@ -101,32 +101,64 @@ public:
     //EFFECTS  Leads one Card from Player's hand according to their strategy
     //  "Lead" means to play the first Card in a trick.  The card
     //  is removed the player's hand.
+    
+    //When a Simple Player leads a trick, they play the highest non-trump card
+    //in their hand. If they have only trump cards, they play the highest
+    //trump card in their hand.
     virtual Card lead_card(const std::string &trump) {
         assert(hand.size() >= 1);
         sort(hand.begin(), hand.end());
-    
-        if (hand[0].is_trump(trump)) {
-            Card holder = hand[hand.size() - 1];
-            hand.erase(hand.begin() + hand.size() - 1);
-            
-            return holder;
-        }
-        int highest_nontrump = 0;
-        for (int i = 0; i < hand.size(); ++i) {
-            if(hand[i].get_suit() != trump) {
-                ++highest_nontrump;
-            }
-            else {
+        int size = static_cast<int>(hand.size());
+        Card highest;
+        vector<Card> non_trump;
+        
+        bool all_trump = true;
+        for (int i = 0; i < size; ++i) {
+            if (!hand[i].is_trump(trump)) {
+                all_trump = false;
                 break;
             }
         }
-        Card holder = hand[highest_nontrump];
-        hand.erase(hand.begin() + highest_nontrump);
-        return holder;
+        if (all_trump) {
+            for (int i = 0; i < size - 1; ++i) {
+                if(Card_less(hand[i], hand[i + 1], trump)) {
+                    highest = hand[i + 1];
+                }
+                else {
+                    highest = hand[i];
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < size; ++i) {
+                if(!hand[i].is_trump(trump)) {
+                    non_trump.push_back(hand[i]);
+                }
+            }
+            for (int i = 0; i < int(non_trump.size() - 1); ++i) {
+                if(Card_less(hand[i], hand[i + 1], trump)) {
+                    highest = non_trump[i + 1];
+                }
+                else {
+                    highest = non_trump[i];
+                }
+            }
+            
+        }
+        for (int j = 0; j < size; ++j) {
+            if(hand[j] == highest) {
+                hand.erase(hand.begin() + j);
+                return highest;
+            }
+        }
+        assert(false);
     }
     //REQUIRES Player has at least one card, trump is a valid suit
     //EFFECTS  Plays one Card from Player's hand according to their strategy.
     //  The card is removed from the player's hand.
+    
+    //If a Simple Player can follow suit, they play the highest card that
+    //follows suit. Otherwise, they play the lowest card in their hand.
     virtual Card play_card(const Card &led_card, const std::string &trump) {
         assert(hand.size() >= 1);
         sort(hand.begin(), hand.end());
@@ -134,7 +166,7 @@ public:
         Card holder;
         
         holder = highest_of_suit(led_suit, hand);
-        for (int i = 0; i < hand.size(); ++i) {
+        for (int i = 0; i < int(hand.size()); ++i) {
             if(hand[i] == holder) {
                 hand.erase(hand.begin() + i);
                 break;
