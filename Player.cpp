@@ -117,7 +117,6 @@ public:
         assert(hand.size() >= 1);
         sort_with_trump(trump, hand);
         Card holder;
-        //sort(hand.begin(), hand.end());
         int size = static_cast<int>(hand.size());
         
         if(hand[0].is_trump(trump)) {
