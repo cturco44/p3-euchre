@@ -27,8 +27,23 @@ TEST(test_player_get_name) {
 
     delete bob;
 }
-
-//Tests picking non-trump card with trump present
+TEST(sort_with_trump) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    Card jackofspades(Card::RANK_JACK, Card::SUIT_SPADES);
+    Card nineofdiamonds(Card::RANK_NINE, Card:: SUIT_DIAMONDS);
+    Card queenofhearts(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(aceofspades);
+    billie->add_card(jackofclubs);
+    billie->add_card(nineofdiamonds);
+    billie->add_card(jackofspades);
+    billie->add_card(queenofhearts);
+    
+    billie->lead_card(Card::SUIT_SPADES);
+}
+Tests picking non-trump card with trump present
 TEST(simple_lead_card) {
     Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
     Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
