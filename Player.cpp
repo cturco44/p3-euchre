@@ -20,7 +20,7 @@ private:
          int size = int(hand1.size());
         
          for (int i = 0; i < size; ++i) {
-             for(int j = 1; j < 5 - i; ++j) {
+             for(int j = 1; j < size - i; ++j) {
                  if(Card_less(hand1[i + j], hand1[i], trump)) {
                      Card holder = hand1[i];
                      hand1[i] = hand1[i + j];
@@ -96,37 +96,9 @@ public:
     //(Note that at this point, the trump suit is the suit of the upcard.)
     virtual void add_and_discard(const Card &upcard) {
         assert(hand.size() >= 1);
-        int size = int(hand.size());
-        
-        
-        sort(hand.begin(), hand.end());
+        //int size = int(hand.size());
         string trump = upcard.get_suit();
-        Card smallest;
-        vector<Card> non_trump;
-        
-        bool all_trump = true;
-        for (int i = 0; i < size; ++i) {
-            if (!hand[i].is_trump(trump)) {
-                all_trump = false;
-                break;
-            }
-        }
-        if (all_trump) {
-            if(Card_less(hand[0], upcard, trump)) {
-                return;
-            }
-            else {
-                hand[0] = upcard;
-                sort(hand.begin(), hand.end());
-                return;
-            }
-        }
-        for (int i = 0; i < size; ++i) {
-            if(!hand[i].is_trump(trump)) {
-                non_trump.push_back(hand[i]);
-            }
-        }
-        sort(non_trump.begin(), non_trump.end());
+        sort_with_trump(trump, hand);
         
         if(Card_less(hand[0], upcard, trump)) {
             hand[0] = upcard;
@@ -144,50 +116,23 @@ public:
     virtual Card lead_card(const std::string &trump) {
         assert(hand.size() >= 1);
         sort_with_trump(trump, hand);
+        Card holder;
         //sort(hand.begin(), hand.end());
         int size = static_cast<int>(hand.size());
-        Card highest;
-        vector<Card> non_trump;
         
-        bool all_trump = true;
-        for (int i = 0; i < size; ++i) {
-            if (!hand[i].is_trump(trump)) {
-                all_trump = false;
-                break;
+        if(hand[0].is_trump(trump)) {
+            holder = hand[size - 1];
+            hand.erase(hand.begin() + size - 1);
+            return holder;
+        }
+        for(int i = 0; i < size; ++i) {
+            if(hand[i].is_trump(trump)) {
+                holder = hand[i - 1];
+                hand.erase(hand.begin() + (i - 1));
+                return holder;
             }
         }
-        if (all_trump) {
-            for (int i = 0; i < size - 1; ++i) {
-                if(Card_less(hand[i], hand[i + 1], trump)) {
-                    highest = hand[i + 1];
-                }
-                else {
-                    highest = hand[i];
-                }
-            }
-        }
-        else {
-            for (int i = 0; i < size; ++i) {
-                if(!hand[i].is_trump(trump)) {
-                    non_trump.push_back(hand[i]);
-                }
-            }
-            for (int i = 0; i < int(non_trump.size() - 1); ++i) {
-                if(Card_less(hand[i], hand[i + 1], trump)) {
-                    highest = non_trump[i + 1];
-                }
-                else {
-                    highest = non_trump[i];
-                }
-            }
-            
-        }
-        for (int j = 0; j < size; ++j) {
-            if(hand[j] == highest) {
-                hand.erase(hand.begin() + j);
-                return highest;
-            }
-        }
+        //Should not get here
         assert(false);
     }
     //REQUIRES Player has at least one card, trump is a valid suit
@@ -198,24 +143,25 @@ public:
     //follows suit. Otherwise, they play the lowest card in their hand.
     virtual Card play_card(const Card &led_card, const std::string &trump) {
         assert(hand.size() >= 1);
-        sort(hand.begin(), hand.end());
+        sort_with_trump(trump, hand);
         std::string led_suit = led_card.get_suit();
-        int size = int(hand.size());
+        int hand_size = int(hand.size());
         vector<Card> suit_holder;
+        Card holder;
         
-        for (int i = 0; i < size; ++i) {
-            if(hand[i].get_suit() == led_suit) {
+        for (int i = 0; i < hand_size; ++i) {
+            if(hand[i].get_suit(trump) == led_suit) {
                 suit_holder.push_back(hand[i]);
             }
         }
         if (int(suit_holder.size()) == 0) {
-            Card holder = hand[0];
+            holder = hand[0];
             hand.erase(hand.begin());
             return holder;
         }
-        sort(suit_holder.begin(), suit_holder.end());
-        Card holder = suit_holder[size - 1];
-        for (int i = 0; i < size; ++i) {
+        sort_with_trump(trump, suit_holder);
+        holder = suit_holder[int(suit_holder.size()) - 1];
+        for (int i = 0; i < hand_size; ++i) {
             if(holder == hand[i]) {
                 hand.erase(hand.begin() + i);
                 return holder;

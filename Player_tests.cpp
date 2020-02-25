@@ -42,8 +42,9 @@ TEST(sort_with_trump) {
     billie->add_card(queenofhearts);
     
     billie->lead_card(Card::SUIT_SPADES);
+    delete billie;
 }
-Tests picking non-trump card with trump present
+//Tests picking non-trump card with trump present
 TEST(simple_lead_card) {
     Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
     Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
@@ -175,33 +176,52 @@ TEST(simple_play_card_left) {
 }
 
 //Tests for if player only has trump
-TEST(simple_play_card_trump) {
-    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
-    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
-
-    Player * billie = Player_factory("Billie", "Simple");
-    add_cards(billie);
-    billie->add_card(jackofspades);
-
-    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_SPADES)==two_spades);
-    
-    delete billie;
-}
+//TEST(simple_play_card_trump) {
+//    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
+//    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+//
+//    Player * billie = Player_factory("Billie", "Simple");
+//    add_cards(billie);
+//    billie->add_card(jackofspades);
+//
+//    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_SPADES)==two_spades);
+//    
+//    delete billie;
+//}
 
 //Basic test for add and discard
-TEST(simple_add_and_discard) {
-    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
-    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+//TEST(simple_add_and_discard) {
+//    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
+//    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+//    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+//
+//    Player * billie = Player_factory("Billie", "Simple");
+//    billie->add_card(jackofspades);
+//    billie->add_and_discard(jackofclubs);
+//
+//
+//    delete billie;
+//}
+TEST(add_and_discard_2) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
     Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    Card jackofspades(Card::RANK_JACK, Card::SUIT_SPADES);
+    Card nineofdiamonds(Card::RANK_NINE, Card:: SUIT_DIAMONDS);
+    Card queenofhearts(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card nineofhearts(Card::RANK_NINE, Card::SUIT_HEARTS);
     
     Player * billie = Player_factory("Billie", "Simple");
-    add_cards(billie);
-    billie->add_card(jackofspades);
-    billie->add_and_discard(jackofclubs);
-
-    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_HEARTS)==jackofclubs);
+    billie->add_card(aceofspades);
+    billie->add_card(nineofhearts);
+    billie->add_card(nineofdiamonds);
+    billie->add_card(jackofclubs);
+    billie->add_card(queenofhearts);
+    
+    billie->add_and_discard(jackofspades);
     
     delete billie;
+    
+    
 }
 
 
