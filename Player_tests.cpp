@@ -189,6 +189,22 @@ TEST(simple_add_and_discard) {
     delete billie;
 }
 
+//Tests if dealer has all greater than upcard and not complete hand
+TEST(simple_add_and_discard_nice_hand) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
+
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+    billie->add_card(jackofclubs);
+    billie->add_and_discard(aceofspades);
+
+    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_HEARTS)==jackofclubs);
+    
+    delete billie;
+}
 
 
 TEST_MAIN()
