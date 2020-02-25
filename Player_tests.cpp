@@ -176,34 +176,21 @@ TEST(simple_play_card_left) {
 }
 
 //Tests for if player only has trump
-//TEST(simple_play_card_trump) {
-//    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
-//    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
-//
-//    Player * billie = Player_factory("Billie", "Simple");
-//    add_cards(billie);
-//    billie->add_card(jackofspades);
-//
-//    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_SPADES)==two_spades);
-//    
-//    delete billie;
-//}
+TEST(simple_play_card_trump) {
+    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
 
-//Basic test for add and discard
-//TEST(simple_add_and_discard) {
-//    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
-//    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
-//    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
-//
-//    Player * billie = Player_factory("Billie", "Simple");
-//    billie->add_card(jackofspades);
-//    billie->add_and_discard(jackofclubs);
-//
-//
-//    delete billie;
-//}
-TEST(add_and_discard_2) {
-    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Player * billie = Player_factory("Billie", "Simple");
+    add_cards(billie);
+    billie->add_card(jackofspades);
+
+    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_SPADES)==jackofspades);
+    
+    delete billie;
+}
+
+TEST(add_and_discard) {
+    Card aceofclubs(Card::RANK_ACE, Card:: SUIT_CLUBS);
     Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
     Card jackofspades(Card::RANK_JACK, Card::SUIT_SPADES);
     Card nineofdiamonds(Card::RANK_NINE, Card:: SUIT_DIAMONDS);
@@ -211,7 +198,7 @@ TEST(add_and_discard_2) {
     Card nineofhearts(Card::RANK_NINE, Card::SUIT_HEARTS);
     
     Player * billie = Player_factory("Billie", "Simple");
-    billie->add_card(aceofspades);
+    billie->add_card(aceofclubs);
     billie->add_card(nineofhearts);
     billie->add_card(nineofdiamonds);
     billie->add_card(jackofclubs);
@@ -219,6 +206,7 @@ TEST(add_and_discard_2) {
     
     billie->add_and_discard(jackofspades);
     
+    ASSERT_TRUE(billie->play_card(jackofspades, Card::SUIT_HEARTS)==jackofspades);
     delete billie;
     
     
