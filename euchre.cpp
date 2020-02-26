@@ -76,7 +76,7 @@ public:
     }
     
     
-    void trump (Player* player0, Player* player1, Player* player2, Player* player3, int dealer) {
+    void set_trump (Player* player0, Player* player1, Player* player2, Player* player3, int dealer) {
         
     }
 
