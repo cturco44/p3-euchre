@@ -42,6 +42,7 @@ private:
     int team1tricks;
     int team2tricks;
     int winPoints;
+    vector<Card> trick;
     string trump;
     
     int to_left(int start, int plus) {
@@ -83,7 +84,47 @@ public:
     dealer = 0;
     orderedUp = 0;
     }
-    
+    //Sorts cards low to high
+     void sort_with_trump(const string trump, vector<Card> &hand1) {
+         int size = int(hand1.size());
+        
+         for (int i = 0; i < size; ++i) {
+             for(int j = 1; j < size - i; ++j) {
+                 if(Card_less(hand1[i + j], hand1[i], trump)) {
+                     Card holder = hand1[i];
+                     hand1[i] = hand1[i + j];
+                     hand1[i + j] = holder;
+                 }
+             }
+         }
+     }
+
+    int run_trick() {
+        int leadPlayer = (dealer%3)+1;
+        vector<Card> orderedCards;
+        //Player leads card
+        trick.push_back((players.at(leadPlayer))->lead_card(trump));
+        orderedCards.push_back(trick.at(0));
+        
+        //Others play cards
+        for(int i = 1; i <= 3; ++i) {
+        trick.push_back((players.at(leadPlayer+i)->play_card(trick.at(0),trump)));
+        orderedCards.push_back(trick.at(i));
+        }
+
+        //Sort played cards
+        sort_with_trump(trump, trick);
+
+        //Search for who played the highest card
+        for(int i = 0; i < 4; i++) {
+            if(orderedCards.at(i) == trick.at(3))
+                return i;
+        }
+        //Should not get here
+        assert(false);
+
+    }
+    void deal();
     
     
     
