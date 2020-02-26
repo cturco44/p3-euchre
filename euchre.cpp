@@ -39,7 +39,10 @@ private:
     vector<Player*> players;
     int orderedUp;
     int dealer;
+    //Players 0 and 2
     int team1tricks;
+    
+    //Players 1 and 3
     int team2tricks;
     int winPoints;
     vector<Card> trick;
@@ -99,8 +102,7 @@ public:
          }
      }
 
-    int run_trick() {
-        int leadPlayer = (dealer%3)+1;
+    int run_trick(int leadPlayer) {
         vector<Card> orderedCards;
         
         //Player leads card
@@ -125,12 +127,95 @@ public:
         assert(false);
 
     }
-    
-    void round() {
-        assert(false);
+    void score (int &round_winner, bool &euchred, bool &marched) {
+        euchred = false;
+        marched = false;
+        
+        int team_ordered_up = 0;
+        if (orderedUp == 0 || orderedUp == 2) {
+            team_ordered_up = 1;
+        }
+        else {
+            team_ordered_up = 2;
+        }
+        if(team1tricks > team2tricks) {
+            round_winner = 1;
+        }
+        else {
+            round_winner = 2;
+        }
+        //euchred
+        if (round_winner == 1 && team_ordered_up == 2) {
+            team1Score += 2;
+            euchred = true;
+            return;
+        }
+        if (round_winner == 2 && team_ordered_up == 1) {
+            team2Score += 2;
+            euchred = true;
+            return;
+        }
+        
+        //marched
+        if(round_winner == 1 && team1tricks == 5) {
+            team1Score += 2;
+            marched = true;
+            return;
+        }
+        if(round_winner == 2 && team2tricks == 5) {
+            team2Score += 2;
+            marched = true;
+            return;
+        }
+        
+        if(round_winner == 1) {
+            ++team1Score;
+            return;
+        }
+        if(round_winner == 2) {
+            ++team2Score;
+            return;
+        }
     }
-
-    void deal(){
+    void round() {
+        int lead = dealer;
+        bool euchred = false;
+        bool marched = false;
+        int winner = 0;
+        for(int i = 0; i < 5; ++i) {
+            lead = run_trick(lead);
+            if (lead == 0 || lead == 2) {
+                ++team1tricks;
+            }
+            if(lead == 1 || lead == 3) {
+                ++team2tricks;
+            }
+        }
+        //Print score after hand
+        score(winner, euchred, marched);
+        if(winner == 1) {
+            cout << players[0]->get_name() << " and "
+            <<  players[2]->get_name() << " win the hand" << endl;
+            
+        }
+        if (winner == 2) {
+            cout << players[1]->get_name() << " and "
+            <<  players[3]->get_name() << " win the hand" << endl;
+        }
+        if(euchred) {
+            cout << "euchred!" << endl;
+        }
+        if(marched) {
+            cout << "march!" << endl;
+        }
+        cout << players[0]->get_name() << " and " <<  players[2]->get_name()
+        << " have " << team1Score << " points" << endl;
+        
+        cout << players[1]->get_name() << " and " <<  players[3]->get_name()
+        << " have " << team2Score << " points" << endl;
+        
+    }
+    void deal() {
         int dealtNum;
         for(int i = 1; i <= 8; i++) {
             //Check how many cards need be given
@@ -152,7 +237,6 @@ public:
     }
     
     string set_trump (const Card &upcard) {
-
         string order_up_suit;
         for (int round = 1; round <=2; ++round) {
             for (int i = 0; i < 4; ++i) {
