@@ -50,7 +50,7 @@ public:
     //  change order_up_suit to desired suit.  If Player wishes to pass, then do
     //  not modify order_up_suit and return false.
     virtual bool make_trump(const Card &upcard, bool is_dealer,
-                            int round, std::string &order_up_suit) const {
+                            int round, std::string &order_up_suit) const override{
         assert(round == 1 || round == 2);
         if(round == 1) {
             int num_good_trump = 0;

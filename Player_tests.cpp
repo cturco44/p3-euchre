@@ -106,6 +106,20 @@ TEST(simple_lead_card_trump_right) {
     delete billie;
 }
 
+//Tests for lead card with unfull deck
+TEST(simple_lead_card_unfull) {
+    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    
+    billie->add_card(aceofspades);
+    
+    ASSERT_TRUE(billie->lead_card(Card::SUIT_SPADES)==aceofspades);
+    
+    delete billie;
+}
+
 //If player can follow suit
 TEST(simple_play_card) {
     Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
@@ -175,6 +189,19 @@ TEST(simple_play_card_left) {
     delete billie;
 }
 
+//Tests play card if player has not full hand
+TEST(simple_play_card_unfull) {
+    Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+
+    Player * billie = Player_factory("Billie", "Simple");
+    add_cards(billie);
+
+    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_SPADES)==two_spades);
+    
+    delete billie;
+}
+
 //Tests for if player only has trump
 TEST(simple_play_card_trump) {
     Card two_spades = Card(Card::RANK_TWO, Card::SUIT_SPADES);
@@ -189,6 +216,7 @@ TEST(simple_play_card_trump) {
     delete billie;
 }
 
+//Basic add and discard
 TEST(add_and_discard) {
     Card aceofclubs(Card::RANK_ACE, Card:: SUIT_CLUBS);
     Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
@@ -224,10 +252,141 @@ TEST(simple_add_and_discard_nice_hand) {
     billie->add_card(jackofclubs);
     billie->add_and_discard(aceofspades);
 
-    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_HEARTS)==jackofclubs);
+    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_HEARTS)==jackofspades);
     
     delete billie;
 }
 
+//Tests making trump not dealer round 1
+TEST(simple_make_trump_dealer_round1) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+    billie->add_card(jackofclubs);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_TRUE(billie->make_trump(aceofspades,false,1, order_up_suit));
+    
+    delete billie;
+}
+
+//Tests making trump dealer round 1
+TEST(simple_make_trump_round1) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+    billie->add_card(jackofclubs);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_TRUE(billie->make_trump(aceofspades,true,1, order_up_suit));
+    
+    delete billie;
+}
+
+//Tests making trump not dealer round 2
+TEST(simple_make_trump_round2) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+    billie->add_card(jackofclubs);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_TRUE(billie->make_trump(aceofspades,false,2, order_up_suit));
+    
+    delete billie;
+}
+
+//Tests making trump dealer round 2
+TEST(simple_make_trump_dealer_round2) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+    billie->add_card(jackofclubs);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_TRUE(billie->make_trump(aceofspades,true,2, order_up_suit));
+    ASSERT_TRUE(order_up_suit==Card::SUIT_CLUBS);
+    
+    delete billie;
+}
+
+//Tests making trump call same color one card in hand dealer
+TEST(simple_same_make_trump_dealer_round2) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_TRUE(billie->make_trump(aceofspades,true,2, order_up_suit));
+    ASSERT_TRUE(order_up_suit==Card::SUIT_CLUBS);
+    
+    
+    delete billie;
+}
+
+//Tests making trump call same color one card in hand not dealer
+TEST(simple_make_trump_not_dealer_round2) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_TRUE(billie->make_trump(aceofspades,false,2, order_up_suit));
+    ASSERT_TRUE(order_up_suit==Card::SUIT_CLUBS);
+    
+    delete billie;
+}
+
+//Tests making trump pass due to possession of opposite color
+TEST(simple_make_trump_pass) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    Card queenofhearts(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(jackofspades);
+
+    string order_up_suit = Card::SUIT_HEARTS;
+    ASSERT_FALSE(billie->make_trump(queenofhearts,false,2, order_up_suit));
+    ASSERT_TRUE(order_up_suit==Card::SUIT_HEARTS);
+    
+    delete billie;
+}
+
+//Tests Screw the dealer
+TEST(screw_the_dealer) {
+    Card aceofspades(Card::RANK_ACE, Card:: SUIT_SPADES);
+    Card jackofspades(Card::RANK_JACK, Card:: SUIT_SPADES);
+    Card jackofclubs(Card::RANK_JACK, Card:: SUIT_CLUBS);
+    Card queenofhearts(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+
+    Player * billie = Player_factory("Billie", "Simple");
+    billie->add_card(queenofhearts);
+
+    string order_up_suit = Card::SUIT_SPADES;
+    ASSERT_FALSE(billie->make_trump(aceofspades,true,2, order_up_suit));
+    ASSERT_TRUE(order_up_suit==Card::SUIT_CLUBS);
+    
+    delete billie;
+}
 
 TEST_MAIN()
