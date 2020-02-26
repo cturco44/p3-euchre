@@ -74,6 +74,7 @@ public:
     dealer = 0;
     orderedUp = 0;
     }
+    
 
 };
 
