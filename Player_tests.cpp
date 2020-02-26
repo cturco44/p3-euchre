@@ -224,7 +224,9 @@ TEST(simple_add_and_discard_nice_hand) {
     billie->add_card(jackofclubs);
     billie->add_and_discard(aceofspades);
 
-    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_HEARTS)==jackofclubs);
+    //Two non trump of same rank are broken by D > C > H > S. Since we are
+    //supposed to discard worst suit here, which is clubs because hearts is trump
+    ASSERT_TRUE(billie->play_card(two_spades,Card::SUIT_HEARTS)==jackofspades);
     
     delete billie;
 }
