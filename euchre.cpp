@@ -36,6 +36,7 @@ private:
     Player* player1;
     Player* player2;
     Player* player3;
+    vector<Player*> players;
     int orderdUp;
     int dealer;
     int team1tricks;
@@ -46,8 +47,23 @@ public:
                         string player0name, string player0type,
                         string player1name, string player1type,
                         string player2name, string player2type,
-                        string player3name, string player3type);
-    void deal(Player* player0, Player* player1, Player* player2, Player* player3);
+                        string player3name, string player3type) {
+    //Create Players
+    player0 = Player_factory(player0name, player0type);
+    player1 = Player_factory(player1name, player1type);
+    player2 = Player_factory(player2name, player2type);
+    player3 = Player_factory(player3name, player3type);
+    
+    //Create Pack
+    ifstream packIn;
+    packIn.open(filename);
+    pack = Pack(packIn);
+    if(shuffle == "shuffle")
+        pack.shuffle();
+    
+    //
+
+    }
 
 };
 
