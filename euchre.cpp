@@ -37,13 +37,14 @@ private:
     Player* player2;
     Player* player3;
     vector<Player*> players;
-    int orderdUp;
+    int orderedUp;
     int dealer;
     int team1tricks;
     int team2tricks;
+    int winPoints;
 
 public:
-    Game(string filename, string shuffle, string winPoints,
+    Game(string filename, string shuffle, string endPoints,
                         string player0name, string player0type,
                         string player1name, string player1type,
                         string player2name, string player2type,
@@ -53,13 +54,29 @@ public:
     player1 = Player_factory(player1name, player1type);
     player2 = Player_factory(player2name, player2type);
     player3 = Player_factory(player3name, player3type);
-    
+    players = {player0, player1, player2, player3};
+
     //Create Pack
     ifstream packIn;
     packIn.open(filename);
     pack = Pack(packIn);
     if(shuffle == "shuffle")
         pack.shuffle();
+    
+    //Declare winpoints
+    winPoints = stoi(endPoints);
+
+    //Initialize all other member variables
+    team1Score = 0;
+    team2Score = 0;
+    roundNum = 0;
+    dealer = 0;
+    orderedUp = 0;
+    }
+    
+    
+    void trump (Player* player0, Player* player1, Player* player2, Player* player3, int dealer) {
+        
     }
 
 };
@@ -69,16 +86,5 @@ int main(int argc, char **argv) {
     Game game(argv[1],argv[2],argv[3],
               argv[4],argv[5],argv[6],argv[7],
               argv[8],argv[9],argv[10],argv[11]);
-    
-    //Player 0 and 2 are partners
-    //Dealer is set to player 0
-    
-    //Play a Hand:
-    //Deal
-    //Select Trump and take into account who ordered up
-    //Play a trick x 5
-    //Return number of tricks taken
-
-
 
 }
