@@ -48,6 +48,12 @@ public:
                         string player2name, string player2type,
                         string player3name, string player3type);
     void deal(Player* player0, Player* player1, Player* player2, Player* player3);
+    
+    void trump (Player* player0, Player* player1, Player* player2, Player* player3, int dealer) {
+        
+        
+        assert(false);
+    }
 
 };
 
