@@ -135,8 +135,7 @@ public:
                 return holder;
             }
         }
-        //Should not get here
-        assert(false);
+        return hand[hand.size() - 1];
     }
     //REQUIRES Player has at least one card, trump is a valid suit
     //EFFECTS  Plays one Card from Player's hand according to their strategy.

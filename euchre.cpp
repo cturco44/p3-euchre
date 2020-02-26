@@ -47,6 +47,8 @@ private:
     int winPoints;
     vector<Card> trick;
     string trump;
+    bool shuffle;
+    bool error;
     
     int to_left(int start, int plus) {
         if (start + plus > 3) {
@@ -58,7 +60,7 @@ private:
     }
 
 public:
-    Game(string filename, string shuffle, string endPoints,
+    Game(string filename, string shuffle1, string endPoints,
                         string player0name, string player0type,
                         string player1name, string player1type,
                         string player2name, string player2type,
@@ -74,11 +76,21 @@ public:
     ifstream packIn;
     packIn.open(filename);
     pack = Pack(packIn);
-    if(shuffle == "shuffle")
-        pack.shuffle();
     
+        error = false;
+        
+    if(shuffle1 == "shuffle") {
+        shuffle = true;
+    } else {
+        shuffle = false;
+    }
+        
+        
+        
+        
     //Declare winpoints
     winPoints = stoi(endPoints);
+        
 
     //Initialize all other member variables
     team1Score = 0;
@@ -86,6 +98,23 @@ public:
     roundNum = 0;
     dealer = 0;
     orderedUp = 0;
+    }
+    int get_highest_score() {
+        if (team1Score > team2Score) {
+            return team1Score;
+        }
+        else {
+            return team2Score;
+        }
+    }
+    string get_dealer_name() {
+        return players[dealer]->get_name();
+    }
+    int get_win_points() {
+        return winPoints;
+    }
+    string get_trump() {
+        return trump;
     }
     //Sorts cards low to high
      void sort_with_trump(const string trump, vector<Card> &hand1) {
@@ -109,10 +138,17 @@ public:
         trick.push_back((players.at(leadPlayer))->lead_card(trump));
         orderedCards.push_back(trick.at(0));
         
+        //Added cout
+        cout << trick.at(0) << " led by " << players.at(leadPlayer)->get_name() << endl;
+        
         //Others play cards
         for(int i = 1; i <= 3; ++i) {
-        trick.push_back((players.at(leadPlayer+i)->play_card(trick.at(0),trump)));
-        orderedCards.push_back(trick.at(i));
+            trick.push_back((players.at(to_left(leadPlayer, i))->play_card(trick.at(0),trump)));
+            orderedCards.push_back(trick.at(i));
+            
+            //added cout
+            cout << trick.at(i) << " played by " << players.at(i)->get_name() << endl;
+            
         }
 
         //Sort played cards
@@ -120,8 +156,11 @@ public:
 
         //Search for who played the highest card
         for(int i = 0; i < 4; i++) {
-            if(orderedCards.at(i) == trick.at(3))
+            if(orderedCards.at(i) == trick.at(3)) {
+                trick.erase(trick.begin(), trick.end());
                 return i;
+            }
+                
         }
         //Should not get here
         assert(false);
@@ -178,12 +217,13 @@ public:
         }
     }
     void round() {
-        int lead = dealer;
+        int lead = to_left(dealer, 1);
         bool euchred = false;
         bool marched = false;
         int winner = 0;
         for(int i = 0; i < 5; ++i) {
             lead = run_trick(lead);
+            cout << players[lead]->get_name() << " takes the trick " << endl << endl;
             if (lead == 0 || lead == 2) {
                 ++team1tricks;
             }
@@ -213,17 +253,23 @@ public:
         
         cout << players[1]->get_name() << " and " <<  players[3]->get_name()
         << " have " << team2Score << " points" << endl;
+        team1tricks = 0;
+        team2tricks = 0;
         
     }
-    void deal() {
+    Card deal() {
         int dealtNum;
+        pack.reset();
+        if (shuffle) {
+            pack.shuffle();
+        }
         for(int i = 1; i <= 8; i++) {
             //Check how many cards need be given
             if((dealer+i)%2 == 1 && i <=4)
                 dealtNum = 3;
             else if(i <=4)
                 dealtNum = 2;
-            else if((dealer+i)==1)
+            else if((dealer+i)%2==1)
                 dealtNum = 2;
             else
                 dealtNum = 3;
@@ -232,11 +278,11 @@ public:
             for(int j = 0; j < dealtNum; j++) {
                 (players.at((dealer+i)%4))->add_card(pack.deal_one());
             }
-            
         }
+        return pack.deal_one();
     }
     
-    string set_trump (const Card &upcard) {
+    void set_trump (const Card &upcard) {
         string order_up_suit;
         for (int round = 1; round <=2; ++round) {
             for (int i = 0; i < 4; ++i) {
@@ -247,10 +293,14 @@ public:
                 else {
                     isdealer = false;
                 }
-                if(players[to_left(dealer, i)]->make_trump(upcard, isdealer, round, order_up_suit)) {
-                    
-                    orderedUp = to_left(dealer, i);
-                    return order_up_suit;
+                if(players[to_left(dealer, i + 1)]->make_trump(upcard, isdealer, round, order_up_suit)) {
+                    cout << players[to_left(dealer, i + 1)]->get_name() << " orders up " << order_up_suit << endl << endl;
+                    orderedUp = to_left(dealer, i + 1);
+                    trump = order_up_suit;
+                    return;
+                }
+                else {
+                    cout << players[to_left(dealer, i + 1)]->get_name() << " passes" << endl;
                 }
             }
         }
@@ -262,9 +312,50 @@ public:
 };
 
 int main(int argc, char **argv) {
+    //Checks for input errors
+    bool error = false;
+    string points_string = string(argv[3]);
+    int points = stoi(points_string);
+    if (argc != 12) {
+        error = true;
+    }
+    if(points < 1 || points > 100) {
+        error = true;
+    }
+    if(!(strcmp(argv[2], "shuffle")) && !(strcmp(argv[2], "noshuffle"))) {
+        error = true;
+    }
+    for(int i = 5; i <= 11; i += 2) {
+        if(!(strcmp(argv[i], "Simple")) && !(strcmp(argv[i], "Human"))) {
+            error = true;
+        }
+    }
+    if (error) {
+        cout << "Usage: euchre.exe PACK_FILENAME [shuffle|noshuffle] "
+     << "POINTS_TO_WIN NAME1 TYPE1 NAME2 TYPE2 NAME3 TYPE3 "
+     << "NAME4 TYPE4" << endl;
+        
+        return 5;
+    }
     //Initialize the game
     Game game(argv[1],argv[2],argv[3],
               argv[4],argv[5],argv[6],argv[7],
               argv[8],argv[9],argv[10],argv[11]);
+    
+    //Prints arguments as required
+    for (int i = 0; i < 12; ++i) {
+        cout << argv[i] << " ";
+    }
+    cout << endl;
+    int hand = 0;
+    while(game.get_highest_score() < game.get_win_points()) {
+        cout << "Hand " << hand << endl;
+        cout << game.get_dealer_name() << " deals" << endl;
+        Card upcard = game.deal();
+        cout << upcard << " turned up" << endl;
+        game.set_trump(upcard);
+        game.round();
+    }
 
+    
 }
