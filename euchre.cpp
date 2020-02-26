@@ -199,10 +199,12 @@ public:
     
     
     
+    void round() {
+        
+    }
     
     
-    
-    string set_trump (vector<Player*> players, const int dealer, const Card &upcard) {
+    string set_trump (Card &upcard) {
         string order_up_suit;
         for (int round = 1; round <=2; ++round) {
             for (int i = 0; i < 4; ++i) {
