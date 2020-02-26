@@ -44,6 +44,15 @@ private:
     int winPoints;
     vector<Card> trick;
     string trump;
+    
+    int to_left(int start, int plus) {
+        if (start + plus > 3) {
+            return start + plus - 4;
+        }
+        else {
+            return start + plus;
+        }
+    }
 
 public:
     Game(string filename, string shuffle, string endPoints,
@@ -90,7 +99,7 @@ public:
          }
      }
 
-    int trick() {
+    int run_trick() {
         int leadPlayer = (dealer%3)+1;
         vector<Card> orderedCards;
         
@@ -112,6 +121,8 @@ public:
             if(orderedCards.at(i) == trick.at(3))
                 return i;
         }
+        //Should not get here
+        assert(false);
 
     }
 
@@ -135,9 +146,29 @@ public:
             
         }
     }
-    void set_trump (Player* player0, Player* player1, Player* player2, Player* player3, int dealer) {
-        
+    
+    string set_trump (vector<Player*> players, const int dealer, const Card &upcard) {
+        string order_up_suit;
+        for (int round = 1; round <=2; ++round) {
+            for (int i = 0; i < 4; ++i) {
+                bool isdealer;
+                if (to_left(dealer, i) == dealer) {
+                    isdealer = true;
+                }
+                else {
+                    isdealer = false;
+                }
+                if(players[to_left(dealer, i)]->make_trump(upcard, isdealer, round, order_up_suit)) {
+                    
+                    orderedUp = to_left(dealer, i);
+                    return order_up_suit;
+                }
+            }
+        }
+        //Should not get here
+        assert(false);
     }
+    
 
 };
 
