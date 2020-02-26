@@ -42,6 +42,7 @@ private:
     int team1tricks;
     int team2tricks;
     int winPoints;
+    string trump;
 
 public:
     Game(string filename, string shuffle, string endPoints,
