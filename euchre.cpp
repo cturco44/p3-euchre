@@ -102,6 +102,7 @@ public:
     int run_trick() {
         int leadPlayer = (dealer%3)+1;
         vector<Card> orderedCards;
+        
         //Player leads card
         trick.push_back((players.at(leadPlayer))->lead_card(trump));
         orderedCards.push_back(trick.at(0));
@@ -124,87 +125,34 @@ public:
         assert(false);
 
     }
-    void deal();
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     void round() {
-        
+        assert(false);
+    }
+
+    void deal(){
+        int dealtNum;
+        for(int i = 1; i <= 8; i++) {
+            //Check how many cards need be given
+            if((dealer+i)%2 == 1 && i <=4)
+                dealtNum = 3;
+            else if(i <=4)
+                dealtNum = 2;
+            else if((dealer+i)==1)
+                dealtNum = 2;
+            else
+                dealtNum = 3;
+
+            //Distribute Cards
+            for(int j = 0; j < dealtNum; j++) {
+                (players.at((dealer+i)%4))->add_card(pack.deal_one());
+            }
+            
+        }
     }
     
-    
-    string set_trump (Card &upcard) {
+    string set_trump (const Card &upcard) {
+
         string order_up_suit;
         for (int round = 1; round <=2; ++round) {
             for (int i = 0; i < 4; ++i) {
