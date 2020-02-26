@@ -34,13 +34,13 @@ public:
     SimplePlayer(std::string name_in)
       : name(name_in) {}
     //EFFECTS returns player's name
-    virtual const std::string & get_name() const {
+    virtual const std::string & get_name() const override{
         return name;
     }
  
     //REQUIRES player has less than MAX_HAND_SIZE cards
     //EFFECTS  adds Card c to Player's hand
-    virtual void add_card(const Card &c) {
+    virtual void add_card(const Card &c) override{
         hand.push_back(c);
         std::sort(hand.begin(), hand.end());
     }
@@ -98,7 +98,7 @@ public:
     //the upcard. The dealer then discards the lowest card in their hand,
     //even if this is the upcard, for a final total of five cards.
     //(Note that at this point, the trump suit is the suit of the upcard.)
-    virtual void add_and_discard(const Card &upcard) {
+    virtual void add_and_discard(const Card &upcard) override{
         assert(hand.size() >= 1);
         //int size = int(hand.size());
         string trump = upcard.get_suit();
@@ -117,7 +117,7 @@ public:
     //When a Simple Player leads a trick, they play the highest non-trump card
     //in their hand. If they have only trump cards, they play the highest
     //trump card in their hand.
-    virtual Card lead_card(const std::string &trump) {
+    virtual Card lead_card(const std::string &trump) override{
         assert(hand.size() >= 1);
         sort_with_trump(trump, hand);
         Card holder;
@@ -144,7 +144,7 @@ public:
     
     //If a Simple Player can follow suit, they play the highest card that
     //follows suit. Otherwise, they play the lowest card in their hand.
-    virtual Card play_card(const Card &led_card, const std::string &trump) {
+    virtual Card play_card(const Card &led_card, const std::string &trump) override {
         assert(hand.size() >= 1);
         sort_with_trump(trump, hand);
         std::string led_suit = led_card.get_suit();
