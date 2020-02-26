@@ -93,11 +93,16 @@ public:
         
 
     //Initialize all other member variables
+        team1tricks = 0;
+        team2tricks = 0;
     team1Score = 0;
     team2Score = 0;
     roundNum = 0;
     dealer = 0;
     orderedUp = 0;
+    }
+    string get_player_name(int index) {
+        return players[index]->get_name();
     }
     int get_highest_score() {
         if (team1Score > team2Score) {
@@ -106,6 +111,12 @@ public:
         else {
             return team2Score;
         }
+    }
+    int get_team1_score() {
+        return team1Score;
+    }
+    int get_team2_score() {
+        return team2Score;
     }
     string get_dealer_name() {
         return players[dealer]->get_name();
@@ -117,12 +128,12 @@ public:
         return trump;
     }
     //Sorts cards low to high
-     void sort_with_trump(const string trump, vector<Card> &hand1) {
+     void sort_with_trump(const string trump, vector<Card> &hand1, const Card &led_card) {
          int size = int(hand1.size());
         
          for (int i = 0; i < size; ++i) {
              for(int j = 1; j < size - i; ++j) {
-                 if(Card_less(hand1[i + j], hand1[i], trump)) {
+                 if(Card_less(hand1[i + j], hand1[i], led_card, trump)) {
                      Card holder = hand1[i];
                      hand1[i] = hand1[i + j];
                      hand1[i + j] = holder;
@@ -133,10 +144,11 @@ public:
 
     int run_trick(int leadPlayer) {
         vector<Card> orderedCards;
+        vector<int> player_played;
         
         //Player leads card
         trick.push_back((players.at(leadPlayer))->lead_card(trump));
-        orderedCards.push_back(trick.at(0));
+        player_played.push_back(leadPlayer);
         
         //Added cout
         cout << trick.at(0) << " led by " << players.at(leadPlayer)->get_name() << endl;
@@ -144,21 +156,23 @@ public:
         //Others play cards
         for(int i = 1; i <= 3; ++i) {
             trick.push_back((players.at(to_left(leadPlayer, i))->play_card(trick.at(0),trump)));
-            orderedCards.push_back(trick.at(i));
+            player_played.push_back(to_left(leadPlayer, i));
             
             //added cout
-            cout << trick.at(i) << " played by " << players.at(i)->get_name() << endl;
+            cout << trick.at(i) << " played by " << players.at(to_left(leadPlayer, i))->get_name() << endl;
             
         }
-
+        
         //Sort played cards
-        sort_with_trump(trump, trick);
+        orderedCards = trick;
+        sort_with_trump(trump, trick, orderedCards[0]);
+        
 
         //Search for who played the highest card
         for(int i = 0; i < 4; i++) {
             if(orderedCards.at(i) == trick.at(3)) {
                 trick.erase(trick.begin(), trick.end());
-                return i;
+                return player_played[i];
             }
                 
         }
@@ -223,7 +237,7 @@ public:
         int winner = 0;
         for(int i = 0; i < 5; ++i) {
             lead = run_trick(lead);
-            cout << players[lead]->get_name() << " takes the trick " << endl << endl;
+            cout << players[lead]->get_name() << " takes the trick" << endl << endl;
             if (lead == 0 || lead == 2) {
                 ++team1tricks;
             }
@@ -322,11 +336,13 @@ int main(int argc, char **argv) {
     if(points < 1 || points > 100) {
         error = true;
     }
-    if(!(strcmp(argv[2], "shuffle")) && !(strcmp(argv[2], "noshuffle"))) {
+    string shuffle_type = string(argv[2]);
+    if(shuffle_type != "shuffle" && shuffle_type != "noshuffle") {
         error = true;
     }
     for(int i = 5; i <= 11; i += 2) {
-        if(!(strcmp(argv[i], "Simple")) && !(strcmp(argv[i], "Human"))) {
+        string player_type = string(argv[i]);
+        if(player_type != "Simple" && player_type != "Human") {
             error = true;
         }
     }
@@ -356,6 +372,11 @@ int main(int argc, char **argv) {
         game.set_trump(upcard);
         game.round();
     }
-
-    
+    cout << endl;
+    if(game.get_team1_score() > game.get_team2_score()) {
+        cout << game.get_player_name(0) << " and " << game.get_player_name(2) << " win!" << endl;
+    }
+    else {
+        cout << game.get_player_name(1) << " and " << game.get_player_name(3) << " win!" << endl;
+    }
 }

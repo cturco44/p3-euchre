@@ -1,3 +1,34 @@
+
+I slept in late yesterday so I was not tired so I grinded on euchre. From what I
+can tell, I think I debugged most of our euchre functions. So far, on the first
+test (euchre_test00), we get the right output. I have not tried the other tests
+yet beside the human test. However, when I ran the human test, the formatting
+of the cout is wrong. Because the numbers for human are off, it caused the
+output to be wrong and when you input a 0 it causes an runtime error because 0
+is out of range. So if you have time to fix that today that would be great.
+
+Also, from what I can tell so far we have no valgrind errors in CAEN.
+
+Also, there are some things that I know still need to be done or still need to
+be checked:
+    
+    1. I wasn't sure the best way to read in pack (from main or constructor).
+    You had already set up a way to read from constructor, so I just left that.
+    However, project spec says you need to have an error message if pack file
+    fails to open so we should decided where we want to put that for good. Spec
+    made it sound like you might want to read in from main so that was the only
+    reason I was not sure whether to change it or not.
+    
+    2. After a round of euchre (5 hands, game is not done), certain variables in
+    game need to be reset to 0. I beleive that I have already reset all of them.
+    However, the public test they gave us was for only one round, so if we forgot
+    to reset something, we will definitly be screwed. So we need to create more
+    test cases with multiple rounds so that we can get rid of any bugs caused
+    from doing multiple rounds.
+    
+    Let me know if you have any questions about what I did.
+
+
 Card Functions:
     Connor:
         a.	Card()
