@@ -135,7 +135,9 @@ public:
                 return holder;
             }
         }
-        return hand[hand.size() - 1];
+        holder = hand[hand.size() - 1];
+        hand.erase(hand.begin() + int(hand.size()) - 1);
+        return holder;
     }
     //REQUIRES Player has at least one card, trump is a valid suit
     //EFFECTS  Plays one Card from Player's hand according to their strategy.
@@ -146,7 +148,7 @@ public:
     virtual Card play_card(const Card &led_card, const std::string &trump) override {
         assert(hand.size() >= 1);
         sort_with_trump(trump, hand);
-        std::string led_suit = led_card.get_suit();
+        std::string led_suit = led_card.get_suit(trump);
         int hand_size = int(hand.size());
         vector<Card> suit_holder;
         Card holder;

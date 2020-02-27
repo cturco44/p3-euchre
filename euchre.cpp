@@ -101,6 +101,13 @@ public:
     dealer = 0;
     orderedUp = 0;
     }
+    void increment_dealer() {
+        if (dealer == 3) {
+            dealer = 0;
+        } else {
+            ++dealer;
+        }
+    }
     string get_player_name(int index) {
         return players[index]->get_name();
     }
@@ -266,7 +273,7 @@ public:
         << " have " << team1Score << " points" << endl;
         
         cout << players[1]->get_name() << " and " <<  players[3]->get_name()
-        << " have " << team2Score << " points" << endl;
+        << " have " << team2Score << " points" << endl << endl;
         team1tricks = 0;
         team2tricks = 0;
         
@@ -279,11 +286,11 @@ public:
         }
         for(int i = 1; i <= 8; i++) {
             //Check how many cards need be given
-            if((dealer+i)%2 == 1 && i <=4)
+            if((i)%2 == 1 && i <=4)
                 dealtNum = 3;
             else if(i <=4)
                 dealtNum = 2;
-            else if((dealer+i)%2==1)
+            else if((i)%2==1)
                 dealtNum = 2;
             else
                 dealtNum = 3;
@@ -301,7 +308,7 @@ public:
         for (int round = 1; round <=2; ++round) {
             for (int i = 0; i < 4; ++i) {
                 bool isdealer;
-                if (to_left(dealer, i) == dealer) {
+                if (to_left(dealer, i + 1) == dealer) {
                     isdealer = true;
                 }
                 else {
@@ -311,6 +318,9 @@ public:
                     cout << players[to_left(dealer, i + 1)]->get_name() << " orders up " << order_up_suit << endl << endl;
                     orderedUp = to_left(dealer, i + 1);
                     trump = order_up_suit;
+                    if(round == 1) {
+                        players[dealer]->add_and_discard(upcard);
+                    }
                     return;
                 }
                 else {
@@ -371,8 +381,11 @@ int main(int argc, char **argv) {
         cout << upcard << " turned up" << endl;
         game.set_trump(upcard);
         game.round();
+        ++hand;
+        game.increment_dealer();
+        
     }
-    cout << endl;
+    
     if(game.get_team1_score() > game.get_team2_score()) {
         cout << game.get_player_name(0) << " and " << game.get_player_name(2) << " win!" << endl;
     }
