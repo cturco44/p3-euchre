@@ -175,7 +175,6 @@ public:
             << players.at(to_left(leadPlayer, i))->get_name() << endl;
             
         }
-        
         //Sort played cards
         orderedCards = trick;
         sort_with_trump(trump, trick, orderedCards[0]);
@@ -186,12 +185,10 @@ public:
             if(orderedCards.at(i) == trick.at(3)) {
                 trick.erase(trick.begin(), trick.end());
                 return player_played[i];
-            }
-                
+            }    
         }
-        //Should not get here
-        assert(false);
-
+        cerr<<"Messed Up"<<endl;
+        return -1;
     }
     void score (int &round_winner, bool &euchred, bool &marched) {
         euchred = false;
@@ -352,35 +349,36 @@ public:
     
 
 };
-
+void print_error(){
+    cout << "Usage: euchre.exe PACK_FILENAME [shuffle|noshuffle] "
+     << "POINTS_TO_WIN NAME1 TYPE1 NAME2 TYPE2 NAME3 TYPE3 "
+     << "NAME4 TYPE4" << endl;    
+}
 int main(int argc, char **argv) {
     //Checks for input errors
-    bool error = false;
     string points_string = string(argv[3]);
     int points = stoi(points_string);
     if (argc != 12) {
-        error = true;
+        print_error();
+        return -1;
     }
     if(points < 1 || points > 100) {
-        error = true;
+        print_error();
+            return -1;
     }
     string shuffle_type = string(argv[2]);
     if(shuffle_type != "shuffle" && shuffle_type != "noshuffle") {
-        error = true;
+        print_error();
+            return -1;
     }
     for(int i = 5; i <= 11; i += 2) {
         string player_type = string(argv[i]);
         if(player_type != "Simple" && player_type != "Human") {
-            error = true;
+            print_error();
+            return -1;
         }
     }
-    if (error) {
-        cout << "Usage: euchre.exe PACK_FILENAME [shuffle|noshuffle] "
-     << "POINTS_TO_WIN NAME1 TYPE1 NAME2 TYPE2 NAME3 TYPE3 "
-     << "NAME4 TYPE4" << endl;
-        
-        return 5;
-    }
+
     //Initialize the game
     Game game(argv[1],argv[2],argv[3],
               argv[4],argv[5],argv[6],argv[7],

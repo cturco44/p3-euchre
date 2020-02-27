@@ -174,6 +174,7 @@ public:
         }
         //should not make it here
         assert(false);
+        return holder;
     }
     
 };
@@ -182,10 +183,10 @@ class HumanPlayer : public Player {
 private:
     string name;
     vector<Card> hand;
-    static void print_hand(const vector<Card> &hand){
+    static void print_hand(const vector<Card> &hand, string name){
         for(size_t i = 0; i < hand.size(); ++i)
         {
-            cout << i+1 << ". " << hand.at(i) << endl;
+            cout << "Human player " << name <<"'s hand: ["<< i << "] " << hand.at(i) << endl;
         }
     }
 public:
@@ -201,6 +202,7 @@ public:
         hand.push_back(c);
         std::sort(hand.begin(), hand.end());
     }
+
     //R round is 1 or 2
     //M order_up_suit
     //E If Player wishes to order up a trump suit then return true and
@@ -208,28 +210,10 @@ public:
     //  not modify order_up_suit and return false.
     virtual bool make_trump(const Card &upcard, bool is_dealer, int round,
                             std::string &order_up_suit) const override{
-        print_hand(hand);
+        print_hand(hand, name);
         string userDecision;
-        if(round == 1)
-        {
-            cout<<"Enter pass or " << upcard.get_suit()<<":";
-            cin >> userDecision;
-            cout << endl;
-            if(userDecision == "pass")
-                return false;
-            else if(userDecision == upcard.get_suit())
-            {
-                order_up_suit = upcard.get_suit();
-                return true;
-            }
-            else
-            {
-                cout<<"Invalid input"<<endl;
-                return false;
-            }
-        }
-        else if(round ==2){
-            cout<<"Enter pass, Diamonds, Spades, Hearts, Clubs:";
+
+            cout<<"Human player " << name <<", please enter a suit, or \"pass\":";
             cin >> userDecision;
             cout<<endl;
             if(userDecision == "pass")
@@ -255,22 +239,21 @@ public:
                 return true;
             }
             else{cout<<"Invalid input"<<endl; return false;}
-        }
-        else{cout<<"you messed up"; return false;}
         
     }
     //REQUIRES Player has at least one card
     //EFFECTS  Player adds one card to hand and removes one card from hand.
     virtual void add_and_discard(const Card &upcard) override{
         string userDecision;
-        print_hand(hand);
-        cout<< "-1. Discard " << upcard <<endl;
-        cout<< "Choose:";
+        print_hand(hand, name);
+        cout<< "Discard upcard: [-1] "<<endl;
+        cout<< "Human player "<<name<<", please select a card to discard:";
         cin >> userDecision;
+        cout<<endl;
         int choice = stoi(userDecision);
         if(choice != -1)
         {
-            hand.erase(hand.begin()+choice-1);
+            hand.erase(hand.begin()+choice);
             hand.push_back(upcard);
             sort(hand.begin(), hand.end());
             return;
@@ -284,12 +267,13 @@ public:
     //  is removed the player's hand.
     virtual Card lead_card(const std::string &trump) override{
         string userDecision;
-        print_hand(hand);
-        cout<<"Select a card:";
+        print_hand(hand, name);
+        cout<<"Human player " << name <<", please select a card:";
         cin >> userDecision;
+        cout<<endl;
         int choice = stoi(userDecision);
-        Card temp = hand.at(choice-1);
-        hand.erase(hand.begin()+choice-1);
+        Card temp = hand.at(choice);
+        hand.erase(hand.begin()+choice);
         std::sort(hand.begin(), hand.end());
         return temp;
     }
@@ -298,12 +282,13 @@ public:
     //  The card is removed from the player's hand.
     virtual Card play_card(const Card &led_card, const std::string &trump) override{
         string userDecision;
-        print_hand(hand);
-        cout<<"Select a card:";
+        print_hand(hand, name);
+        cout<<"Human player " << name <<", please select a card:";
         cin >> userDecision;
+        cout<<endl;
         int choice = stoi(userDecision);
-        Card temp = hand.at(choice-1);
-        hand.erase(hand.begin()+choice-1);
+        Card temp = hand.at(choice);
+        hand.erase(hand.begin()+choice);
         std::sort(hand.begin(), hand.end());
         return temp;
     }
