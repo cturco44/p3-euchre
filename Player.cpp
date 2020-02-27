@@ -182,10 +182,12 @@ class HumanPlayer : public Player {
 private:
     string name;
     vector<Card> hand;
-    static void print_hand(const vector<Card> &hand){
+    void print_hand(const vector<Card> &hand) const {
         for(size_t i = 0; i < hand.size(); ++i)
         {
-            cout << i+1 << ". " << hand.at(i) << endl;
+            cout << "Human player " << name << "'s hand: [" << i
+            << "] " << hand.at(i) << endl;
+            
         }
     }
 public:
@@ -212,9 +214,9 @@ public:
         string userDecision;
         if(round == 1)
         {
-            cout<<"Enter pass or " << upcard.get_suit()<<":";
+            cout<<"Human player " << name
+            << " please enter a suit, or \"pass\":";
             cin >> userDecision;
-            cout << endl;
             if(userDecision == "pass")
                 return false;
             else if(userDecision == upcard.get_suit())
@@ -229,9 +231,10 @@ public:
             }
         }
         else if(round ==2){
-            cout<<"Enter pass, Diamonds, Spades, Hearts, Clubs:";
+            cout << "Human player " << name
+            << " please enter a suit, or \"pass\":";
             cin >> userDecision;
-            cout<<endl;
+            
             if(userDecision == "pass")
                 return false;
             else if(userDecision == "Diamonds")
@@ -285,11 +288,11 @@ public:
     virtual Card lead_card(const std::string &trump) override{
         string userDecision;
         print_hand(hand);
-        cout<<"Select a card:";
+        cout<<"Human Player " << name << ", please select a card:";
         cin >> userDecision;
         int choice = stoi(userDecision);
-        Card temp = hand.at(choice-1);
-        hand.erase(hand.begin()+choice-1);
+        Card temp = hand.at(choice);
+        hand.erase(hand.begin()+choice);
         std::sort(hand.begin(), hand.end());
         return temp;
     }
@@ -302,8 +305,8 @@ public:
         cout<<"Select a card:";
         cin >> userDecision;
         int choice = stoi(userDecision);
-        Card temp = hand.at(choice-1);
-        hand.erase(hand.begin()+choice-1);
+        Card temp = hand.at(choice);
+        hand.erase(hand.begin()+choice);
         std::sort(hand.begin(), hand.end());
         return temp;
     }
