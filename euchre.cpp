@@ -258,6 +258,8 @@ public:
                 ++team2tricks;
             }
         }
+
+        score(winner, euchred, marched);
         //Print score after hand
         if(winner == 1) {
             cout << players[0]->get_name() << " and "
