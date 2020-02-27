@@ -215,7 +215,8 @@ public:
 
             cout<<"Human player " << name <<", please enter a suit, or \"pass\":";
             cin >> userDecision;
-            cout<<endl;
+            cout << endl;
+            
             if(userDecision == "pass")
                 return false;
             else if(userDecision == "Diamonds")
@@ -246,8 +247,9 @@ public:
     virtual void add_and_discard(const Card &upcard) override{
         string userDecision;
         print_hand(hand, name);
-        cout<< "Discard upcard: [-1] "<<endl;
-        cout<< "Human player "<<name<<", please select a card to discard:";
+        cout<< "Discard upcard: [-1]" << endl;
+        cout << "Human player " << name
+        << ", please select a card to discard:" << endl << endl;
         cin >> userDecision;
         cout<<endl;
         int choice = stoi(userDecision);
