@@ -101,6 +101,12 @@ public:
     dealer = 0;
     orderedUp = 0;
     }
+    void delete_players() {
+        delete player0;
+        delete player1;
+        delete player2;
+        delete player3;
+    }
     void increment_dealer() {
         if (dealer == 3) {
             dealer = 0;
@@ -135,7 +141,8 @@ public:
         return trump;
     }
     //Sorts cards low to high
-     void sort_with_trump(const string trump, vector<Card> &hand1, const Card &led_card) {
+     void sort_with_trump(const string trump, vector<Card> &hand1,
+                          const Card &led_card) {
          int size = int(hand1.size());
         
          for (int i = 0; i < size; ++i) {
@@ -162,11 +169,13 @@ public:
         
         //Others play cards
         for(int i = 1; i <= 3; ++i) {
-            trick.push_back((players.at(to_left(leadPlayer, i))->play_card(trick.at(0),trump)));
+            trick.push_back((players.at(to_left(leadPlayer, i))->
+                             play_card(trick.at(0),trump)));
             player_played.push_back(to_left(leadPlayer, i));
             
             //added cout
-            cout << trick.at(i) << " played by " << players.at(to_left(leadPlayer, i))->get_name() << endl;
+            cout << trick.at(i) << " played by "
+            << players.at(to_left(leadPlayer, i))->get_name() << endl;
             
         }
         
@@ -305,29 +314,40 @@ public:
     
     void set_trump (const Card &upcard) {
         string order_up_suit;
-        for (int round = 1; round <=2; ++round) {
-            for (int i = 0; i < 4; ++i) {
+        int round = 0;
+            for (int i = 0; i < 8; ++i) {
+                int x = i % 4;
+                if (i < 4) {
+                    round = 1;
+                } else {
+                    round = 2;
+                }
                 bool isdealer;
-                if (to_left(dealer, i + 1) == dealer) {
+                if (to_left(dealer, x + 1) == dealer) {
                     isdealer = true;
                 }
                 else {
                     isdealer = false;
                 }
-                if(players[to_left(dealer, i + 1)]->make_trump(upcard, isdealer, round, order_up_suit)) {
-                    cout << players[to_left(dealer, i + 1)]->get_name() << " orders up " << order_up_suit << endl << endl;
-                    orderedUp = to_left(dealer, i + 1);
+                if(players[to_left(dealer, x + 1)]->make_trump(upcard,
+                                                               isdealer, round,
+                                                               order_up_suit)) {
+                    cout << players[to_left(dealer, x + 1)]->get_name()
+                    << " orders up " << order_up_suit << endl << endl;
+                    orderedUp = to_left(dealer, x + 1);
                     trump = order_up_suit;
+                    
                     if(round == 1) {
                         players[dealer]->add_and_discard(upcard);
                     }
                     return;
                 }
                 else {
-                    cout << players[to_left(dealer, i + 1)]->get_name() << " passes" << endl;
+                    cout << players[to_left(dealer, x + 1)]->get_name()
+                    << " passes" << endl;
                 }
             }
-        }
+        
         //Should not get here
         assert(false);
     }
@@ -387,9 +407,12 @@ int main(int argc, char **argv) {
     }
     
     if(game.get_team1_score() > game.get_team2_score()) {
-        cout << game.get_player_name(0) << " and " << game.get_player_name(2) << " win!" << endl;
+        cout << game.get_player_name(0) << " and "
+        << game.get_player_name(2) << " win!" << endl;
     }
     else {
-        cout << game.get_player_name(1) << " and " << game.get_player_name(3) << " win!" << endl;
+        cout << game.get_player_name(1) << " and "
+        << game.get_player_name(3) << " win!" << endl;
     }
+    game.delete_players();
 }

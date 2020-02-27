@@ -326,9 +326,11 @@ bool Card_less(const Card &a, const Card &b, const Card &led_card,
             return false;
         else if(!a.is_trump(trump) && b.is_trump(trump))
             return true;
-        else if(a.get_suit() != led_card.get_suit() && b.get_suit() == led_card.get_suit())
+        else if(a.get_suit() != led_card.get_suit() && b.get_suit() ==
+                led_card.get_suit())
             return true;
-        else if(a.get_suit() == led_card.get_suit() && b.get_suit() != led_card.get_suit())
+        else if(a.get_suit() == led_card.get_suit() && b.get_suit() !=
+                led_card.get_suit())
             return false;
         else
             return a < b;

@@ -70,7 +70,8 @@ public:
         if(round == 2) {
             int num_good_trump = 0;
             for(int i = 0; i < int(hand.size()); ++i) {
-                if(hand[i].get_suit(Suit_next(upcard.get_suit())) == Suit_next(upcard.get_suit())
+                if(hand[i].get_suit(Suit_next(upcard.get_suit())) ==
+                   Suit_next(upcard.get_suit())
                    && hand[i].is_face()) {
                     ++num_good_trump;
                 }
@@ -200,13 +201,13 @@ public:
         hand.push_back(c);
         std::sort(hand.begin(), hand.end());
     }
-    //REQUIRES round is 1 or 2
-    //MODIFIES order_up_suit
-    //EFFECTS If Player wishes to order up a trump suit then return true and
-    //  change order_up_suit to desired suit.  If Player wishes to pass, then do
+    //R round is 1 or 2
+    //M order_up_suit
+    //E If Player wishes to order up a trump suit then return true and
+    //  change order_up_suit to desired suit.If Player wishes to pass,then do
     //  not modify order_up_suit and return false.
-    virtual bool make_trump(const Card &upcard, bool is_dealer,
-                            int round, std::string &order_up_suit) const override{
+    virtual bool make_trump(const Card &upcard, bool is_dealer, int round,
+                            std::string &order_up_suit) const override{
         print_hand(hand);
         string userDecision;
         if(round == 1)
