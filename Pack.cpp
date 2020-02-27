@@ -43,7 +43,8 @@ Pack::Pack() {
     cards = {NineSPADES,TenSPADES,JackSPADES,QueenSPADES,KingSPADES,AceSPADES,
              NineHEARTS,TenHEARTS,JackHEARTS,QueenHEARTS,KingHEARTS,AceHEARTS,
              NineCLUBS,TenCLUBS,JackCLUBS,QueenCLUBS,KingCLUBS,AceCLUBS,
-             NineDIAMONDS,TenDIAMONDS,JackDIAMONDS,QueenDIAMONDS,KingDIAMONDS,AceDIAMONDS};
+             NineDIAMONDS,TenDIAMONDS,JackDIAMONDS,QueenDIAMONDS,
+        KingDIAMONDS,AceDIAMONDS};
     next = 0;
 }
 

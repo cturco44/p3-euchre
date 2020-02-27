@@ -463,8 +463,10 @@ TEST(card_less_2){
     ASSERT_EQUAL(Card_less(nineclubs, tenspades, eightclubs, Card::SUIT_DIAMONDS), true);
     ASSERT_EQUAL(Card_less(tenspades, nineclubs, eightclubs, Card::SUIT_DIAMONDS), false);
     
-    ASSERT_EQUAL(Card_less(nineclubs, jackdiamonds, eightclubs, Card::SUIT_DIAMONDS), true);
-    ASSERT_EQUAL(Card_less(jackdiamonds, nineclubs, eightclubs, Card::SUIT_DIAMONDS), false);
+    ASSERT_EQUAL(Card_less(nineclubs, jackdiamonds, eightclubs,
+                           Card::SUIT_DIAMONDS), true);
+    ASSERT_EQUAL(Card_less(jackdiamonds, nineclubs,
+                           eightclubs, Card::SUIT_DIAMONDS), false);
 }
 
 TEST(card_less_7){
