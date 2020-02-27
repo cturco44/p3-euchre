@@ -215,8 +215,9 @@ public:
         if(round == 1)
         {
             cout<<"Human player " << name
-            << " please enter a suit, or \"pass\":";
+            << ", please enter a suit, or \"pass\":";
             cin >> userDecision;
+            cout << endl;
             if(userDecision == "pass")
                 return false;
             else if(userDecision == upcard.get_suit())
@@ -232,8 +233,9 @@ public:
         }
         else if(round ==2){
             cout << "Human player " << name
-            << " please enter a suit, or \"pass\":";
+            << ", please enter a suit, or \"pass\":";
             cin >> userDecision;
+            cout << endl;
             
             if(userDecision == "pass")
                 return false;
@@ -267,13 +269,14 @@ public:
     virtual void add_and_discard(const Card &upcard) override{
         string userDecision;
         print_hand(hand);
-        cout<< "-1. Discard " << upcard <<endl;
-        cout<< "Choose:";
+        cout<< "Discard upcard: [-1]" << endl;
+        cout << "Human player " << name
+        << ", please select a card to discard:" << endl << endl;
         cin >> userDecision;
         int choice = stoi(userDecision);
         if(choice != -1)
         {
-            hand.erase(hand.begin()+choice-1);
+            hand.erase(hand.begin()+choice);
             hand.push_back(upcard);
             sort(hand.begin(), hand.end());
             return;
@@ -288,8 +291,9 @@ public:
     virtual Card lead_card(const std::string &trump) override{
         string userDecision;
         print_hand(hand);
-        cout<<"Human Player " << name << ", please select a card:";
+        cout<<"Human player " << name << ", please select a card:";
         cin >> userDecision;
+        cout << endl;
         int choice = stoi(userDecision);
         Card temp = hand.at(choice);
         hand.erase(hand.begin()+choice);
@@ -302,8 +306,9 @@ public:
     virtual Card play_card(const Card &led_card, const std::string &trump) override{
         string userDecision;
         print_hand(hand);
-        cout<<"Select a card:";
+        cout<<"Human player " << name << ", please select a card:";
         cin >> userDecision;
+        cout << endl;
         int choice = stoi(userDecision);
         Card temp = hand.at(choice);
         hand.erase(hand.begin()+choice);
