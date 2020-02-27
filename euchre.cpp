@@ -77,7 +77,7 @@ public:
     packIn.open(filename);
     pack = Pack(packIn);
     
-        error = false;
+    error = false;
         
     if(shuffle1 == "shuffle") {
         shuffle = true;
@@ -85,16 +85,12 @@ public:
         shuffle = false;
     }
         
-        
-        
-        
     //Declare winpoints
     winPoints = stoi(endPoints);
         
-
     //Initialize all other member variables
-        team1tricks = 0;
-        team2tricks = 0;
+    team1tricks = 0;
+    team2tricks = 0;
     team1Score = 0;
     team2Score = 0;
     roundNum = 0;
@@ -127,6 +123,7 @@ public:
     string get_trump() {
         return trump;
     }
+    
     //Sorts cards low to high
      void sort_with_trump(const string trump, vector<Card> &hand1, const Card &led_card) {
          int size = int(hand1.size());
@@ -246,7 +243,6 @@ public:
             }
         }
         //Print score after hand
-        score(winner, euchred, marched);
         if(winner == 1) {
             cout << players[0]->get_name() << " and "
             <<  players[2]->get_name() << " win the hand" << endl;
