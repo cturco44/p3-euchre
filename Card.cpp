@@ -309,16 +309,7 @@ bool Card_less(const Card &a, const Card &b, const Card &led_card,
  //Check Trump
     if( a.is_trump(trump) && b.is_trump(trump))
     {
-        if(b.is_right_bower(trump))
-            return true;
-        else if(a.is_right_bower(trump))
-            return false;
-        else if(b.is_left_bower(trump))
-            return true;
-        else if(a.is_left_bower(trump))
-            return false;
-        else
-            return a < b;
+        return Card_less(a,b,trump);
     }
     else 
     {

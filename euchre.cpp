@@ -36,7 +36,7 @@ private:
     Player* player1;
     Player* player2;
     Player* player3;
-    vector<Player*> players;
+    vector<Player*> players = {player0, player1, player2, player3};
     int orderedUp;
     int dealer;
     //Players 0 and 2
@@ -60,23 +60,7 @@ private:
     }
 
 public:
-    Game(string filename, string shuffle1, string endPoints,
-                        string player0name, string player0type,
-                        string player1name, string player1type,
-                        string player2name, string player2type,
-                        string player3name, string player3type) {
-    //Create Players
-    player0 = Player_factory(player0name, player0type);
-    player1 = Player_factory(player1name, player1type);
-    player2 = Player_factory(player2name, player2type);
-    player3 = Player_factory(player3name, player3type);
-    players = {player0, player1, player2, player3};
-
-    //Create Pack
-    ifstream packIn;
-    packIn.open(filename);
-    pack = Pack(packIn);
-    
+    Game(string shuffle1, string endPoints) {  
     error = false;
         
     if(shuffle1 == "shuffle") {
@@ -97,11 +81,27 @@ public:
     dealer = 0;
     orderedUp = 0;
     }
+
+    int create_pack(string filename) {
+    //Create Pack
+    ifstream packIn;
+    packIn.open(filename);
+    if(!packIn)
+    {
+        cout << "Error opening " << filename << endl;
+        return -1;
+    }
+    pack = Pack(packIn);
+    return 0;
+    }
+    
+    void create_player(int num, string pn, string pt){
+        players.at(num) = Player_factory(pn,pt);
+    }
     void delete_players() {
-        delete player0;
-        delete player1;
-        delete player2;
-        delete player3;
+        for(int i = 0; i < 4; i++) {
+        delete players.at(i);
+    }
     }
     void increment_dealer() {
         if (dealer == 3) {
@@ -328,7 +328,9 @@ public:
                                                                isdealer, round,
                                                                order_up_suit)) {
                     cout << players[to_left(dealer, x + 1)]->get_name()
-                    << " orders up " << order_up_suit << endl << endl;
+                    << " orders up " << order_up_suit << endl;
+                    if(isdealer==false) 
+                        cout << endl;
                     orderedUp = to_left(dealer, x + 1);
                     trump = order_up_suit;
                     
@@ -380,9 +382,15 @@ int main(int argc, char **argv) {
     }
 
     //Initialize the game
-    Game game(argv[1],argv[2],argv[3],
-              argv[4],argv[5],argv[6],argv[7],
-              argv[8],argv[9],argv[10],argv[11]);
+    Game game(argv[2],argv[3]);
+    int check = game.create_pack(argv[1]);
+    if(check != 0)
+    {
+        return -1;
+    }
+    for(int i = 0; i < 4; i++) {
+        game.create_player(i,argv[2*i+4],argv[2*i+5]);
+    }
     
     //Prints arguments as required
     for (int i = 0; i < 12; ++i) {

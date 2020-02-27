@@ -249,7 +249,7 @@ public:
         print_hand(hand, name);
         cout<< "Discard upcard: [-1]" << endl;
         cout << "Human player " << name
-        << ", please select a card to discard:" << endl << endl;
+        << ", please select a card to discard:" << endl;
         cin >> userDecision;
         cout<<endl;
         int choice = stoi(userDecision);
